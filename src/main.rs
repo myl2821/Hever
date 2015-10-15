@@ -1,5 +1,6 @@
 extern crate bufstream;
 
+use std::env;
 use std::net::TcpListener;
 use std::thread;
 use bufstream::BufStream;
@@ -7,13 +8,18 @@ use bufstream::BufStream;
 mod doit;
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:9123").unwrap();
+    let ip = env::args().nth(1).unwrap();
+    let port = env::args().nth(2).unwrap();
+    let addr = &*(format!("{}:{}", ip, port));
+
+    let listener = TcpListener::bind(addr).unwrap();
     println!("listening started, ready to accept");
     for stream in listener.incoming() {
         thread::spawn(|| {
             let stream = BufStream::new(stream.unwrap());
 
-            doit::handle_client(stream);
+            let _ = doit::handle_client(stream);
+            println!("client disconnected");
         });
     }
 }

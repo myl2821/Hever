@@ -4,4 +4,4 @@ version = "0.1.0"
 authors = ["myl <myl2821@gmail.com>"]
 
 [dependencies]
-bufstream = "0.1"
+bufstream = "*"

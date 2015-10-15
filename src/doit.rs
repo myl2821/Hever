@@ -1,14 +1,15 @@
 use std::net::TcpStream;
 use std::io::prelude::*;
+use std::io;
 use bufstream::BufStream;
 
-pub fn handle_client(mut stream: BufStream<TcpStream>) {
+pub fn handle_client(mut stream: BufStream<TcpStream>) -> Result<(), io::Error> {
     println!("incoming req");
     loop {
         let mut line = String::new();
-        let _ = stream.read_line(&mut line).unwrap();
+        try!(stream.read_line(&mut line));
         print!("{}", line);
-        stream.write(line.as_bytes()).unwrap();
-        stream.flush().unwrap();
+        try!(stream.write(line.as_bytes()));
+        try!(stream.flush());
     }
 }
