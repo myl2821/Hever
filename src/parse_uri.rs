@@ -24,7 +24,6 @@ fn test_parse() {
     let mut args = HashMap::<String, String>::new();
     parse(uri, &mut filename, &mut args);
     assert_eq!(filename, "public/xxx");
-    let xx = args.get(&("a".to_string()));
     assert_eq!(args.len(), 2);
     assert_eq!(args.get(&("a".to_string())).unwrap(), &("11".to_string()));
     assert_eq!(args.get(&("b".to_string())).unwrap(), &("22".to_string()));
