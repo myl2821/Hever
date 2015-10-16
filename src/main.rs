@@ -6,6 +6,8 @@ use std::thread;
 use bufstream::BufStream;
 
 mod doit;
+mod read_header;
+mod parse_uri;
 
 fn main() {
     let ip = env::args().nth(1).unwrap();
@@ -17,9 +19,7 @@ fn main() {
     for stream in listener.incoming() {
         thread::spawn(|| {
             let stream = BufStream::new(stream.unwrap());
-
             let _ = doit::handle_client(stream);
-            println!("client disconnected");
         });
     }
 }
