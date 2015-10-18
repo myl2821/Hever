@@ -6,6 +6,7 @@ use std::ascii::AsciiExt;
 use std::collections::HashMap;
 use read_header;
 use parse_uri;
+use util;
 
 pub fn handle_client(mut stream: BufStream<TcpStream>) -> Result<(), io::Error> {
     loop {
@@ -27,6 +28,8 @@ pub fn handle_client(mut stream: BufStream<TcpStream>) -> Result<(), io::Error> 
                         let mut filename = String::new();
                         let mut args = HashMap::new();
                         parse_uri::parse(String::from(uri), &mut filename, &mut args);
+                        util::write_head(&mut stream, 13);
+                        try!(stream.flush());
                     },
                     Err(_) => {
                         return Ok(());

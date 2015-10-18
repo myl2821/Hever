@@ -8,6 +8,7 @@ use bufstream::BufStream;
 mod doit;
 mod read_header;
 mod parse_uri;
+mod util;
 
 fn main() {
     let ip = env::args().nth(1).unwrap();
