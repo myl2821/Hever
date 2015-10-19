@@ -5,3 +5,5 @@ authors = ["myl <myl2821@gmail.com>"]
 
 [dependencies]
 bufstream = "*"
+docopt = "0.6"
+rustc-serialize = "0.3"
