@@ -26,9 +26,8 @@ Options:
 struct Args {
     arg_bind: String,
     arg_port: u16,
-    arg_public_folder: Option<String>,
+    arg_public_folder: String,
 }
-
 
 fn main() {
     let args: Args = Docopt::new(USAGE)
@@ -42,9 +41,10 @@ fn main() {
     let listener = TcpListener::bind(addr).unwrap();
     println!("listening on {}:{}, ready to accept", ip, port);
     for stream in listener.incoming() {
-        thread::spawn(|| {
+        let pub_folder = pub_folder.clone();
+        thread::spawn(move || {
             let stream = BufStream::new(stream.unwrap());
-            let _ = doit::handle_client(stream);
+            let _ = doit::handle_client(stream, &pub_folder);
         });
     }
 }

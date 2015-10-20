@@ -8,7 +8,7 @@ use read_header;
 use parse_uri;
 use util;
 
-pub fn handle_client(mut stream: BufStream<TcpStream>) -> Result<(), io::Error> {
+pub fn handle_client(mut stream: BufStream<TcpStream>, pub_folder: &str) -> Result<(), io::Error> {
     loop {
         let mut line = String::new();
         try!(stream.read_line(&mut line));
@@ -29,6 +29,11 @@ pub fn handle_client(mut stream: BufStream<TcpStream>) -> Result<(), io::Error> 
                         let mut args = HashMap::new();
                         parse_uri::parse(String::from(uri), &mut filename, &mut args);
                         util::write_head(&mut stream, 13);
+                        let fp = String::from(pub_folder) + &filename;
+                        let content = util::read_file(&*fp);
+                        if content.is_some() {
+                            try!(stream.write(&content.unwrap()));
+                        }
                         try!(stream.flush());
                     },
                     Err(_) => {
